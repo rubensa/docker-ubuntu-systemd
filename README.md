@@ -28,8 +28,12 @@ docker run --rm -it \
   --tmpfs /run \
   --tmpfs /run/lock \
   -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+  -v /etc/timezone:/etc/timezone:ro \
+  -v /etc/localtime:/etc/localtime:ro \
   rubensa/ubuntu-systemd
 ```
+
+NOTE: Mounting /etc/timezone and /etc/localtime allows you to use your host timezone on container.
 
 ## Connect
 
@@ -56,7 +60,7 @@ docker stop \
 
 ## Start
 
-If you run the container without -rm you can start it again like this:
+If you run the container without --rm you can start it again like this:
 
 ```
 #!/usr/bin/env bash
