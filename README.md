@@ -38,7 +38,7 @@ prepare_docker_systemd
 prepare_docker_timezone
 
 docker run --rm -it \
-  --name ubuntu-systemd \
+  --name "ubuntu-systemd" \
   ${MOUNTS} \
   rubensa/ubuntu-systemd
 ```
