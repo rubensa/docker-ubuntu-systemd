@@ -38,7 +38,7 @@ prepare_docker_systemd
 prepare_docker_timezone
 
 docker run --rm -it \
-  --name "ubuntu-systemd" \
+  --name ubuntu-systemd \
   ${MOUNTS} \
   rubensa/ubuntu-systemd
 ```
@@ -53,7 +53,7 @@ You can connect to the running container like this:
 #!/usr/bin/env bash
 
 docker exec -it \
-  "ubuntu-systemd" \
+  ubuntu-systemd \
   bash -l
 ```
 
@@ -65,7 +65,7 @@ You can stop the running container like this:
 #!/usr/bin/env bash
 
 docker stop \
-  "ubuntu-systemd"
+  ubuntu-systemd
 ```
 
 ## Start
@@ -75,5 +75,6 @@ If you run the container without --rm you can start it again like this:
 ```
 #!/usr/bin/env bash
 
-docker start "ubuntu-systemd"
+docker start \
+  ubuntu-systemd
 ```
