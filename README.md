@@ -23,13 +23,20 @@ You can run the container like this (change --rm with -d if you don't want the c
 #!/usr/bin/env bash
 
 prepare_docker_systemd() {
-  MOUNTS+=" --mount type=tmpfs,destination=/tmp"
+  # https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
+  # Systemd expects /run is mounted as a tmpfs
   MOUNTS+=" --mount type=tmpfs,destination=/run"
+  # Systemd expects /run/lock to be a separate mount point (https://github.com/containers/libpod/issues/3295)
   MOUNTS+=" --mount type=tmpfs,destination=/run/lock"
+  # Systemd expects /sys/fs/cgroup filesystem is mounted.  It can work with it being mounted read/only.
   MOUNTS+=" --mount type=bind,source=/sys/fs/cgroup,target=/sys/fs/cgroup,readonly"
+  # Systemd expects /sys/fs/cgroup/systemd be mounted read/write.
+  # Not needed as the subdir/mount points (/sys/fs/cgroup is already mounted) will be mounted in as read/write
+  #MOUNTS+=" --mount type=bind,source=/sys/fs/cgroup/systemd,target=/sys/fs/cgroup/systemd"
 }
 
 prepare_docker_timezone() {
+  # https://www.waysquare.com/how-to-change-docker-timezone/
   MOUNTS+=" --mount type=bind,source=/etc/timezone,target=/etc/timezone,readonly"
   MOUNTS+=" --mount type=bind,source=/etc/localtime,target=/etc/localtime,readonly"
 }
@@ -42,8 +49,6 @@ docker run --rm -it \
   ${MOUNTS} \
   rubensa/ubuntu-systemd
 ```
-
-NOTE: Mounting /etc/timezone and /etc/localtime allows you to use your host timezone on container.
 
 ## Connect
 

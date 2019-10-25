@@ -30,7 +30,7 @@ RUN apt-get update \
 STOPSIGNAL SIGRTMIN+3
 
 # Tell image required volumes
-VOLUME [ "/sys/fs/cgroup", "/run", "/run/lock", "/tmp" ]
+VOLUME [ "/sys/fs/cgroup", "/run", "/run/lock" ]
 
 # Execute the init command
 ENTRYPOINT [ "/sbin/init" ]
