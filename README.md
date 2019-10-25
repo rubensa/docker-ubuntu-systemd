@@ -22,14 +22,24 @@ You can run the container like this (change --rm with -d if you don't want the c
 ```
 #!/usr/bin/env bash
 
+prepare_docker_systemd() {
+  MOUNTS+=" --mount type=tmpfs,destination=/tmp"
+  MOUNTS+=" --mount type=tmpfs,destination=/run"
+  MOUNTS+=" --mount type=tmpfs,destination=/run/lock"
+  MOUNTS+=" --mount type=bind,source=/sys/fs/cgroup,target=/sys/fs/cgroup,readonly"
+}
+
+prepare_docker_timezone() {
+  MOUNTS+=" --mount type=bind,source=/etc/timezone,target=/etc/timezone,readonly"
+  MOUNTS+=" --mount type=bind,source=/etc/localtime,target=/etc/localtime,readonly"
+}
+
+prepare_docker_systemd
+prepare_docker_timezone
+
 docker run --rm -it \
   --name "ubuntu-systemd" \
-  --tmpfs /tmp \
-  --tmpfs /run \
-  --tmpfs /run/lock \
-  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-  -v /etc/timezone:/etc/timezone:ro \
-  -v /etc/localtime:/etc/localtime:ro \
+  ${MOUNTS} \
   rubensa/ubuntu-systemd
 ```
 
